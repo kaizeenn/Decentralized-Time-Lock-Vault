@@ -27,12 +27,13 @@ pub const MIN_LOCK_DURATION_SECS: u64 = 60;
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum VaultKey {
-    /// Maps a depositor's Address → VaultEntry
     Deposit(Address),
-    /// Contract-level admin address
     Admin,
-    /// Pending admin address during a two-step admin transfer
     PendingAdmin,
+    /// Runtime-configurable max deposit amount (overrides compile-time constant).
+    MaxDeposit,
+    /// Runtime-configurable max lock duration in seconds (overrides compile-time constant).
+    MaxLockSecs,
 }
 
 // ----------------------------------------------------------------

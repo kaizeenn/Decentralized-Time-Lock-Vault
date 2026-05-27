@@ -51,7 +51,7 @@ fn advance_time(env: &Env, seconds: u64) {
         base_reserve: 10,
         min_temp_entry_ttl: 16,
         min_persistent_entry_ttl: 4096,
-        max_entry_ttl: 6_307_200,
+        max_entry_ttl: 33_000_000,
     });
 }
 
@@ -500,6 +500,26 @@ fn test_redeposit_after_withdraw_succeeds() {
 
     let entry = vault.get_vault(&alice).expect("entry should exist");
     assert_eq!(entry.amount, 500);
+}
+
+// ================================================================
+//  TTL / storage constants
+// ================================================================
+
+#[test]
+fn test_bump_target_covers_max_lock_duration() {
+    // At 5 s/ledger, MAX_LOCK_DURATION_SECS converts to ledgers.
+    // BUMP_TARGET must be >= that value so a max-duration deposit
+    // cannot expire before its unlock time.
+    use crate::storage::BUMP_TARGET;
+    const LEDGER_INTERVAL_SECS: u64 = 5;
+    let max_lock_ledgers = MAX_LOCK_DURATION_SECS / LEDGER_INTERVAL_SECS;
+    assert!(
+        BUMP_TARGET as u64 >= max_lock_ledgers,
+        "BUMP_TARGET ({}) must be >= max lock duration in ledgers ({})",
+        BUMP_TARGET,
+        max_lock_ledgers,
+    );
 }
 
 // ================================================================

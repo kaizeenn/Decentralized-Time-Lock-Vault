@@ -285,6 +285,21 @@ TTL is bumped on every **write**. Read-only query functions (`get_vault`, `time_
 
 ---
 
+## Upgradeability
+
+Soroban contracts are **immutable by default** — once deployed, the contract code cannot be changed or patched.
+
+| Implication | Detail |
+|---|---|
+| No in-place upgrades | There is no `upgrade` or `set_code` function; the deployed WASM is fixed forever |
+| Bug fixes require redeployment | A new contract must be deployed and users must migrate their funds to it |
+| Migration path | The admin can call `emergency_withdraw(admin, depositor)` for each active deposit to return funds to depositors, who can then re-deposit into the new contract |
+| Trustless trade-off | If `renounce_admin()` has been called, no migration is possible — the contract is fully trustless but also fully immutable with no escape hatch |
+
+Plan deployments carefully. Audit the contract before going to mainnet, because there is no way to patch a live deployment.
+
+---
+
 ## Getting Started
 
 ### Prerequisites

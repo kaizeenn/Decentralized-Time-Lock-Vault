@@ -7,7 +7,7 @@ WASM_OUT     := target/wasm32-unknown-unknown/release/time_lock_vault.wasm
 OPTIMIZED    := target/time_lock_vault.optimized.wasm
 
 .PHONY: all build test fmt lint clean optimize deploy-testnet size check audit deny
-.PHONY: all build test fmt lint clean optimize deploy-testnet size check doc smoke-test-local
+.PHONY: all build test fmt lint clean optimize deploy-testnet size check doc smoke-test-local install-tools
 
 ## Default: lint + test
 all: lint test
@@ -78,3 +78,10 @@ check-wasm-size: optimize
 ## Run smoke tests against a local Soroban standalone node (requires stellar CLI)
 smoke-test-local: build
 	bash scripts/smoke_test_local.sh
+
+## Install all required dev tools (stellar-cli, cargo-watch, cargo-audit, cargo-deny)
+install-tools:
+	cargo install --locked stellar-cli
+	cargo install cargo-watch
+	cargo install cargo-audit
+	cargo install cargo-deny

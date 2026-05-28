@@ -353,9 +353,7 @@ impl TimeLockVault {
         if admin != stored_admin {
             return Err(VaultError::Unauthorized);
         }
-        env.storage()
-            .persistent()
-            .remove(&crate::types::VaultKey::Admin);
+        storage::remove_admin(&env);
         storage::remove_pending_admin(&env);
         events::admin_renounced(&env, &admin);
         Ok(())

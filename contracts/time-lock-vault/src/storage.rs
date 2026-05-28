@@ -91,6 +91,10 @@ pub fn get_admin(env: &Env) -> Option<Address> {
     env.storage().persistent().get(&VaultKey::Admin)
 }
 
+pub fn remove_admin(env: &Env) {
+    env.storage().persistent().remove(&VaultKey::Admin);
+}
+
 pub fn set_pending_admin(env: &Env, pending: &Address) {
     env.storage()
         .persistent()
